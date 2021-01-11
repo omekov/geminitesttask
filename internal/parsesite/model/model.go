@@ -7,14 +7,15 @@ type Branch struct {
 	Address   string   `json:"address"`
 	Location  Location `json:"location"`
 	StaffLink string   `json:"staff_link"`
-	Staff     []string `json:"staff"`
+	Staff     []Staff  `json:"staff"`
 }
 
 // Staff ...
 type Staff struct {
-	Name     []string `json:"name"`
-	Position string   `json:"position"`
-	Phone    string   `json:"phone"`
+	Name     string `json:"name"`
+	Position string `json:"position"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
 }
 
 type StaffHeader struct {

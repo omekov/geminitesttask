@@ -11,7 +11,7 @@ import (
 	"github.com/omekov/geminitesttask/internal/parsesite/model"
 )
 
-var ApiKey string = ""
+var ApiKey string
 
 const (
 	geocodeApiUrl = "https://maps.googleapis.com/maps/api/geocode/json?"

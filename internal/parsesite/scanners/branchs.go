@@ -1,7 +1,7 @@
 package scanners
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/gocolly/colly"
 	"github.com/omekov/geminitesttask/internal/parsesite/model"
@@ -32,7 +32,7 @@ func Branch() ([]model.Branch, error) {
 }
 
 // Staff ...
-func Staff(link string) (staffs []string, err error) {
+func Staff(link string) (staffs []model.Staff, err error) {
 	c := colly.NewCollector()
 	staffBlocks := []string{"div.field-prgf-2c-left", "div.field-prgf-description"}
 	staffHeaders := []model.StaffHeader{
@@ -58,7 +58,19 @@ func Staff(link string) (staffs []string, err error) {
 			for _, h := range staffHeaders {
 				if e.ChildText(h.Element) == h.Value {
 					e.ForEach("p", func(i int, el *colly.HTMLElement) {
-						staffs = append(staffs, fmt.Sprintf("%s", el.Text))
+						ret, _ := el.DOM.Html()
+						var staff model.Staff
+						p := strings.Split(strings.Replace(ret, "\n", "", -1), "<br/>")
+						if len(p) > 2 {
+							staff.Name = el.ChildText("strong")
+							staff.Email = el.ChildText("a")
+							staff.Position = p[1]
+							if len(p) == 4 {
+								staff.Email = el.ChildText("a")
+								staff.Phone = p[3]
+							}
+						}
+						staffs = append(staffs, staff)
 					})
 				}
 			}

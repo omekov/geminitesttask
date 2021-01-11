@@ -2,7 +2,6 @@ package parsesite
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -13,8 +12,8 @@ import (
 func server() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/branchs", handlerBranch)
-	// mux.HandleFunc("/staff", handlerStaff)
-	// mux.HandleFunc("/geo", handlerGeo)
+	mux.HandleFunc("/staff", handlerStaff)
+	mux.HandleFunc("/geo", handlerGeo)
 	return mux
 }
 
@@ -32,7 +31,6 @@ func handlerBranch(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(l)
 		branchs[i].Location = l
 	}
 	b, err := json.Marshal(branchs)
@@ -54,12 +52,12 @@ func handlerGeo(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(l)
+	log.Println(l)
 }
 
 // test ..
 func handlerStaff(w http.ResponseWriter, r *http.Request) {
-	staff, err := scanners.Staff("https://ymcanyc.org/locations/ridgewood-ymca/about")
+	staff, err := scanners.Staff("https://ymcanyc.org/locations/flatbush-ymca/about")
 	if err != nil {
 		log.Println("failed to scanner branch:", err)
 		w.WriteHeader(http.StatusInternalServerError)
